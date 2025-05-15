@@ -26,7 +26,7 @@ NavBar.appendChild(menuBotao);
 NavBar.appendChild(cadastroBotao);
 NavBar.appendChild(loginBotao);
 
-function telaCadastro() {
+function telacadastro() {
     conteudo.innerHTML = `
     <h2>Cadastro de Usuário</h2>
     <form id="formCadastro">

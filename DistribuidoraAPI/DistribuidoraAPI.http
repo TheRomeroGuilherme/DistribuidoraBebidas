@@ -1,0 +1,6 @@
+@DistribuidoraAPI_HostAddress = http://localhost:5066
+
+GET {{DistribuidoraAPI_HostAddress}}
+Accept: application/json
+
+###
