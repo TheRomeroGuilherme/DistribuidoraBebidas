@@ -3,17 +3,17 @@ const conteudo = document.getElementById('conteudo');
 
 const menuBotao = document.createElement('button');
 menuBotao.textContent = 'Menu';
-menuBotao.className = 'menubtn';
+menuBotao.className = 'NavBtn';
 
 
 const cadastroBotao = document.createElement('button');
 cadastroBotao.textContent = 'Cadastrar-se';
-cadastroBotao.className='cadastrobtn';
+cadastroBotao.className='NavBtn';
 
 
 const loginBotao = document.createElement('button');
 loginBotao.textContent = 'Logar';
-loginBotao.className = 'loginbtn';
+loginBotao.className = 'NavBtn';
 
 
 

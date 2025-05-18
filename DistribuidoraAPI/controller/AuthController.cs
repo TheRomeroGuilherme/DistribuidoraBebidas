@@ -1,5 +1,5 @@
 using DistribuidoraAPI.Data;
-using DistribuidoraAPI.DTOs;
+using DistribuidoraAPI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +17,7 @@ namespace DistribuidoraAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        public async Task<IActionResult> Login([FromBody] UsuarioLoginDTO dto)
         {
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Email == dto.Email && u.Senha == dto.Senha);
