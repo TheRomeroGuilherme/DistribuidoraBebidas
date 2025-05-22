@@ -1,4 +1,4 @@
-import { LoginView } from '../../View/LoginView.js';
+import { LoginView } from './View/LoginView.js';
 
 export class LoginController {
   constructor(container) {
