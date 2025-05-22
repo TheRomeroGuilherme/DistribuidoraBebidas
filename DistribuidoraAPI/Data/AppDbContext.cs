@@ -7,6 +7,12 @@ namespace DistribuidoraAPI.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Fornecedor> Suppliers { get; set; }
+    public DbSet<Vendedor> Sellers { get; set; }
+    public DbSet<Cliente> Customers { get; set; }
+    public DbSet<Produto> Products { get; set; }
+    public DbSet<CarrinhoDeCompra> Carts { get; set; }
+    public DbSet<Venda> Sales { get; set; }
+    public DbSet<VenderItem> SaleItems { get; set; }
     }
 }
