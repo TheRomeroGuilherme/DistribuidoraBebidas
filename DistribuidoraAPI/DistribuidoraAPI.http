@@ -1,6 +1,33 @@
-@DistribuidoraAPI_HostAddress = http://localhost:5066
-
-GET {{DistribuidoraAPI_HostAddress}}
+### GET todos os fornecedores
+GET http://localhost:5066/api/fornecedor
 Accept: application/json
 
-###
+### GET fornecedor por id
+GET http://localhost:5066/api/fornecedor/1
+Accept: application/json
+
+### POST cadastrar fornecedor (usando DTO)
+POST http://localhost:5066/api/fornecedor/cadastro
+Content-Type: application/json
+
+{
+  "nomeEmpresa": "Distribuidora da hora",
+  "cnpj": "12345678000199",
+  "emailCorporativo": "contato@distribuidora.adm.com",
+  "senha": "Complicado!123"
+}
+
+### PUT atualizar fornecedor (id 1)
+PUT http://localhost:5066/api/fornecedor/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "nomeEmpresa": "Distribuidora da hora",
+  "cnpj": "12345678000199",
+  "emailCorporativo": "novoemail@distribuidoraabc.com",
+  "senhaHash": "$2a$12$exemploDeHashDeSenha"
+}
+
+### DELETE fornecedor (id 1)
+DELETE http://localhost:5066/api/fornecedor/1

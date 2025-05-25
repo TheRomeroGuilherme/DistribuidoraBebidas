@@ -1,4 +1,8 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using DistribuidoraAPI.Models.DTOs;
+using DistribuidoraAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DistribuidoraAPI.Models;
 
