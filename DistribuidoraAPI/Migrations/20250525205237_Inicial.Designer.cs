@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DistribuidoraAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250525012050_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250525205237_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace DistribuidoraAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClienteId")
+                    b.Property<int>("DistribuidoraId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProdutoId")
@@ -44,14 +44,14 @@ namespace DistribuidoraAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("DistribuidoraId");
 
                     b.HasIndex("ProdutoId");
 
                     b.ToTable("CarrinhoDeCompras");
                 });
 
-            modelBuilder.Entity("DistribuidoraAPI.Models.Cliente", b =>
+            modelBuilder.Entity("DistribuidoraAPI.Models.Distribuidora", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace DistribuidoraAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cliente");
+                    b.ToTable("Distribuidora");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Fornecedor", b =>
@@ -93,10 +93,6 @@ namespace DistribuidoraAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Senha")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("SenhaHash")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -114,21 +110,28 @@ namespace DistribuidoraAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("FornecedorId")
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DataValidade")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("FornecedorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("NomeProduto")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("PrecoLote")
+                    b.Property<decimal>("Preco")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<decimal>("PrecoUnitario")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("Quantidade")
+                    b.Property<int>("QuantidadeEstoque")
                         .HasColumnType("int");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("VendedorId")
                         .HasColumnType("int");
@@ -150,24 +153,34 @@ namespace DistribuidoraAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DataValidade")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("FornecedorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("NomeProdutoFornecedor")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("UnidadeLoteFornecedor")
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("QuantidadeEstoque")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ValorLoteFornecedor")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FornecedorId");
 
-                    b.ToTable("ProdutoFornecedor");
+                    b.ToTable("ProdutosFornecedor");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Usuario", b =>
@@ -206,7 +219,7 @@ namespace DistribuidoraAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClienteId")
+                    b.Property<int>("DistribuidoraId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SaleDate")
@@ -220,7 +233,7 @@ namespace DistribuidoraAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("DistribuidoraId");
 
                     b.HasIndex("VendedorId");
 
@@ -283,9 +296,9 @@ namespace DistribuidoraAPI.Migrations
 
             modelBuilder.Entity("DistribuidoraAPI.Models.CarrinhoDeCompra", b =>
                 {
-                    b.HasOne("DistribuidoraAPI.Models.Cliente", "Cliente")
+                    b.HasOne("DistribuidoraAPI.Models.Distribuidora", "Distribuidora")
                         .WithMany("CarrinhoItems")
-                        .HasForeignKey("ClienteId")
+                        .HasForeignKey("DistribuidoraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -295,24 +308,24 @@ namespace DistribuidoraAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cliente");
+                    b.Navigation("Distribuidora");
 
                     b.Navigation("ProdutoItem");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Produto", b =>
                 {
-                    b.HasOne("DistribuidoraAPI.Models.Fornecedor", "fornecedorItem")
+                    b.HasOne("DistribuidoraAPI.Models.Fornecedor", "Fornecedor")
                         .WithMany()
-                        .HasForeignKey("FornecedorId");
+                        .HasForeignKey("FornecedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("DistribuidoraAPI.Models.Vendedor", "Vendedoritem")
+                    b.HasOne("DistribuidoraAPI.Models.Vendedor", null)
                         .WithMany("ProdutoItem")
                         .HasForeignKey("VendedorId");
 
-                    b.Navigation("Vendedoritem");
-
-                    b.Navigation("fornecedorItem");
+                    b.Navigation("Fornecedor");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.ProdutoFornecedor", b =>
@@ -328,9 +341,9 @@ namespace DistribuidoraAPI.Migrations
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Venda", b =>
                 {
-                    b.HasOne("DistribuidoraAPI.Models.Cliente", "Cliente")
+                    b.HasOne("DistribuidoraAPI.Models.Distribuidora", "distribuidora")
                         .WithMany()
-                        .HasForeignKey("ClienteId")
+                        .HasForeignKey("DistribuidoraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -340,7 +353,7 @@ namespace DistribuidoraAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cliente");
+                    b.Navigation("distribuidora");
 
                     b.Navigation("vendedor");
                 });
@@ -364,7 +377,7 @@ namespace DistribuidoraAPI.Migrations
                     b.Navigation("Venda");
                 });
 
-            modelBuilder.Entity("DistribuidoraAPI.Models.Cliente", b =>
+            modelBuilder.Entity("DistribuidoraAPI.Models.Distribuidora", b =>
                 {
                     b.Navigation("CarrinhoItems");
                 });

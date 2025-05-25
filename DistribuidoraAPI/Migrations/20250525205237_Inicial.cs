@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DistribuidoraAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace DistribuidoraAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Cliente",
+                name: "Distribuidora",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -28,7 +28,7 @@ namespace DistribuidoraAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cliente", x => x.Id);
+                    table.PrimaryKey("PK_Distribuidora", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -41,8 +41,6 @@ namespace DistribuidoraAPI.Migrations
                     NomeEmpresa = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Cnpj = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Senha = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EmailCorporativo = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -96,22 +94,26 @@ namespace DistribuidoraAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ProdutoFornecedor",
+                name: "ProdutosFornecedor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NomeProdutoFornecedor = table.Column<string>(type: "longtext", nullable: false)
+                    FornecedorId = table.Column<int>(type: "int", nullable: false),
+                    Nome = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UnidadeLoteFornecedor = table.Column<int>(type: "int", nullable: false),
-                    ValorLoteFornecedor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    FornecedorId = table.Column<int>(type: "int", nullable: false)
+                    Tipo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Preco = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    QuantidadeEstoque = table.Column<int>(type: "int", nullable: false),
+                    DataValidade = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProdutoFornecedor", x => x.Id);
+                    table.PrimaryKey("PK_ProdutosFornecedor", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProdutoFornecedor_Fornecedor_FornecedorId",
+                        name: "FK_ProdutosFornecedor_Fornecedor_FornecedorId",
                         column: x => x.FornecedorId,
                         principalTable: "Fornecedor",
                         principalColumn: "Id",
@@ -125,12 +127,15 @@ namespace DistribuidoraAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NomeProduto = table.Column<string>(type: "longtext", nullable: false)
+                    Nome = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PrecoUnitario = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    PrecoLote = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false),
-                    FornecedorId = table.Column<int>(type: "int", nullable: true),
+                    Tipo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Preco = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    QuantidadeEstoque = table.Column<int>(type: "int", nullable: false),
+                    DataValidade = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FornecedorId = table.Column<int>(type: "int", nullable: false),
                     VendedorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -140,7 +145,8 @@ namespace DistribuidoraAPI.Migrations
                         name: "FK_Produtos_Fornecedor_FornecedorId",
                         column: x => x.FornecedorId,
                         principalTable: "Fornecedor",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Produtos_Vendedor_VendedorId",
                         column: x => x.VendedorId,
@@ -155,7 +161,7 @@ namespace DistribuidoraAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
+                    DistribuidoraId = table.Column<int>(type: "int", nullable: false),
                     VendedorId = table.Column<int>(type: "int", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     SaleDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -164,9 +170,9 @@ namespace DistribuidoraAPI.Migrations
                 {
                     table.PrimaryKey("PK_Vendas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vendas_Cliente_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Cliente",
+                        name: "FK_Vendas_Distribuidora_DistribuidoraId",
+                        column: x => x.DistribuidoraId,
+                        principalTable: "Distribuidora",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -184,7 +190,7 @@ namespace DistribuidoraAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
+                    DistribuidoraId = table.Column<int>(type: "int", nullable: false),
                     ProdutoId = table.Column<int>(type: "int", nullable: false),
                     Quantidade = table.Column<int>(type: "int", nullable: false)
                 },
@@ -192,9 +198,9 @@ namespace DistribuidoraAPI.Migrations
                 {
                     table.PrimaryKey("PK_CarrinhoDeCompras", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CarrinhoDeCompras_Cliente_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Cliente",
+                        name: "FK_CarrinhoDeCompras_Distribuidora_DistribuidoraId",
+                        column: x => x.DistribuidoraId,
+                        principalTable: "Distribuidora",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -236,19 +242,14 @@ namespace DistribuidoraAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarrinhoDeCompras_ClienteId",
+                name: "IX_CarrinhoDeCompras_DistribuidoraId",
                 table: "CarrinhoDeCompras",
-                column: "ClienteId");
+                column: "DistribuidoraId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarrinhoDeCompras_ProdutoId",
                 table: "CarrinhoDeCompras",
                 column: "ProdutoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProdutoFornecedor_FornecedorId",
-                table: "ProdutoFornecedor",
-                column: "FornecedorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Produtos_FornecedorId",
@@ -261,9 +262,14 @@ namespace DistribuidoraAPI.Migrations
                 column: "VendedorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vendas_ClienteId",
+                name: "IX_ProdutosFornecedor_FornecedorId",
+                table: "ProdutosFornecedor",
+                column: "FornecedorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vendas_DistribuidoraId",
                 table: "Vendas",
-                column: "ClienteId");
+                column: "DistribuidoraId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vendas_VendedorId",
@@ -288,7 +294,7 @@ namespace DistribuidoraAPI.Migrations
                 name: "CarrinhoDeCompras");
 
             migrationBuilder.DropTable(
-                name: "ProdutoFornecedor");
+                name: "ProdutosFornecedor");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
@@ -306,7 +312,7 @@ namespace DistribuidoraAPI.Migrations
                 name: "Fornecedor");
 
             migrationBuilder.DropTable(
-                name: "Cliente");
+                name: "Distribuidora");
 
             migrationBuilder.DropTable(
                 name: "Vendedor");

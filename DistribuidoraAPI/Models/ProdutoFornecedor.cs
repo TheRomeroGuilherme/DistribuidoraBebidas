@@ -10,6 +10,11 @@ namespace DistribuidoraAPI.Models;
 public class ProdutoFornecedor
 {
     public int Id { get; set; }
+    
+    [Required]
+    public int FornecedorId { get; set; }
+
+    public Fornecedor Fornecedor { get; set; } = new();
 
     [Required]
     public string Nome { get; set; }= string.Empty;
@@ -29,8 +34,5 @@ public class ProdutoFornecedor
     [Required]
     public DateTime DataCadastro { get; set; }
 
-    [Required]
-    public int FornecedorId { get; set; }
-
-    public Fornecedor Fornecedor { get; set; } = new();
+    
 }

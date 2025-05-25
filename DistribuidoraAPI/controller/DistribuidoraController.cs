@@ -5,7 +5,7 @@ namespace DistribuidoraAPI.controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClienteController : ControllerBase
+    public class DistribuidoraController : ControllerBase
     {
     }
 }
