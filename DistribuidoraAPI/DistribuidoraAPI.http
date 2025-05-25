@@ -11,9 +11,9 @@ POST http://localhost:5066/api/fornecedor/cadastro
 Content-Type: application/json
 
 {
-  "nomeEmpresa": "DistribuidoraABC",
+  "nomeEmpresa": "Fornecedora Bebidas",
   "cnpj": "12345678000199",
-  "emailCorporativo": "contato@distribuidoraabc.com",
+  "emailCorporativo": "contato@Fornecedora.com",
   "senha": "senha123",
   "PorodutosFornecedor": [
     {
@@ -39,17 +39,20 @@ Content-Type: application/json
 }
 
 ### PUT atualizar fornecedor (id 1)
-PUT http://localhost:5066/api/fornecedor/1
+PUT http://localhost:5066/api/fornecedor/3
 Content-Type: application/json
 
 {
-  "id": 1,
-  "nomeEmpresa": "Distribuidora ABC Atualizada",
+  "nomeEmpresa": "fornecedor concorrente",
   "cnpj": "12345678000199",
-  "emailCorporativo": "novoemail@distribuidoraabc.com",
-  "senhaHash": "$2a$11$6r/EHyoZm/ZQcZZNd3dcS.RC.vlAbLMhaQN4H8ttYxchQLPoTxEjy"
+  "emailCorporativo": "contato@fornecedor.com",
+  "senhaHash": "$2a$11$ElCQKgH0I7bn23TmFeauNekK5yb6AIT0vb61IPQm/57J3lbi5AI0S"
 }
 
 ### DELETE fornecedor (id 1)
 DELETE http://localhost:5066/api/fornecedor/1
 
+
+### GET busca de produto de fornecedor por id
+GET http://localhost:5066/api/fornecedor/1/protutos
+Accept: application/json

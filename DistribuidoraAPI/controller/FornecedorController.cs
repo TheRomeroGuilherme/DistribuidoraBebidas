@@ -38,11 +38,11 @@ public class FornecedorController : ControllerBase
             NomeEmpresa = dto.NomeEmpresa,
             Cnpj = dto.Cnpj,
             EmailCorporativo = dto.EmailCorporativo,
-            SenhaHash = senhaHash  
+            SenhaHash = senhaHash
         };
 
         _context.Fornecedor.Add(fornecedor);
-        await _context.SaveChangesAsync(); 
+        await _context.SaveChangesAsync();
 
         if (dto.ProdutosFornecedor != null && dto.ProdutosFornecedor.Count > 0)
         {
@@ -85,6 +85,7 @@ public class FornecedorController : ControllerBase
 
         if (fornecedor == null)
             return NotFound();
+
 
         return fornecedor;
     }
@@ -135,7 +136,7 @@ public class FornecedorController : ControllerBase
     {
         return _context.Fornecedor.Any(e => e.Id == id);
     }
-    
+
     // --- Novo endpoint para cadastrar lote de produtos (bebidas ou insumos) ---
 
     [HttpPost("{fornecedorId}/produtos")]
@@ -160,5 +161,20 @@ public class FornecedorController : ControllerBase
         await _context.SaveChangesAsync();
 
         return Ok(produto);
+    }
+
+    // --- Listagem de produtos Fornecedor 
+    // GET: api/fornecedor/1/produtos
+    [HttpGet("{id}/produtos")]
+    public async Task<IActionResult> GetProdutosDoFornecedor(int id)
+    {
+        var fornecedor = await _context.Fornecedor
+            .Include(f => f.ProdutoFornecedor)
+            .FirstOrDefaultAsync(f => f.Id == id);
+
+        if (fornecedor == null)
+            return NotFound(new { mensagem = "Fornecedor não encontrado." });
+
+        return Ok(fornecedor.ProdutoFornecedor);
     }
 }
