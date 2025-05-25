@@ -4,17 +4,18 @@ using DistribuidoraAPI.Models.DTOs;
 using DistribuidoraAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace DistribuidoraAPI.Models;
-
-public class Produto
+namespace DistribuidoraAPI.Models
 {
-    public int Id { get; set; }
-    public string NomeProduto { get; set; }
-    public decimal PrecoUnitario { get; set; }
-    public decimal PrecoLote { get; set; }
-    public int Quantidade { get; set; }
-    public int? FornecedorId { get; set; }
-    public Fornecedor fornecedorItem { get; set; }
-    public int? VendedorId { get; set; }
-    public Vendedor Vendedoritem { get; set; }
+    public class Produto
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }= string.Empty;
+        public string Tipo { get; set; } = string.Empty;
+        public decimal Preco { get; set; }
+        public int QuantidadeEstoque { get; set; }
+        public DateTime DataValidade { get; set; }
+        public DateTime DataCadastro { get; set; }
+        public int FornecedorId { get; set; }
+        public Fornecedor Fornecedor { get; set; } = new();
+    }
 }

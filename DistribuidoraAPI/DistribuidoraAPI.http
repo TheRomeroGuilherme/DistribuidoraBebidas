@@ -14,7 +14,28 @@ Content-Type: application/json
   "nomeEmpresa": "DistribuidoraABC",
   "cnpj": "12345678000199",
   "emailCorporativo": "contato@distribuidoraabc.com",
-  "senha": "senha123"
+  "senha": "senha123",
+  "PorodutosFornecedor": [
+    {
+      "nome": "Água Mineral",
+      "tipo": "Bebida",
+      "preco": 2.50,
+      "quantidadeEstoque": 100,
+      "dataValidade": "2026-01-01T00:00:00"
+    }
+  ]
+}
+
+### POST produto para o fornecedor
+POST http://localhost:5066/api/fornecedor/1/Produtos
+Content-Type: application/json
+
+{
+  "nome": "Cerveja IPA",
+  "tipo": "Bebida",
+  "preco": 8.50,
+  "quantidadeEstoque": 50,
+  "dataValidade": "2025-12-31T00:00:00"
 }
 
 ### PUT atualizar fornecedor (id 1)
@@ -31,3 +52,4 @@ Content-Type: application/json
 
 ### DELETE fornecedor (id 1)
 DELETE http://localhost:5066/api/fornecedor/1
+

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using DistribuidoraAPI.Models;
 using DistribuidoraAPI.Models.DTOs;
 using DistribuidoraAPI.Data;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,10 @@ public class ProdutoFornecedor
     public int Id { get; set; }
 
     [Required]
-    public string? Nome { get; set; }
+    public string Nome { get; set; }= string.Empty;
 
     [Required]
-    public string? Tipo { get; set; }
+    public string Tipo { get; set; }= string.Empty;
 
     [Required]
     public decimal Preco { get; set; }
@@ -31,5 +32,5 @@ public class ProdutoFornecedor
     [Required]
     public int FornecedorId { get; set; }
 
-    public Fornecedor Fornecedor { get; set; }
+    public Fornecedor Fornecedor { get; set; } = new();
 }

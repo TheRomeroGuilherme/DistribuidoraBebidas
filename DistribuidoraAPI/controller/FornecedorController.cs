@@ -38,14 +38,34 @@ public class FornecedorController : ControllerBase
             NomeEmpresa = dto.NomeEmpresa,
             Cnpj = dto.Cnpj,
             EmailCorporativo = dto.EmailCorporativo,
-            Senha = dto.Senha,
-            SenhaHash = senhaHash
+            SenhaHash = senhaHash  
         };
 
         _context.Fornecedor.Add(fornecedor);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(); 
 
-        return Ok("Fornecedor cadastrado com sucesso.");
+        if (dto.ProdutosFornecedor != null && dto.ProdutosFornecedor.Count > 0)
+        {
+            foreach (var produtoDto in dto.ProdutosFornecedor)
+            {
+                var produto = new ProdutoFornecedor
+                {
+                    Nome = produtoDto.Nome,
+                    Tipo = produtoDto.Tipo,
+                    Preco = produtoDto.Preco,
+                    QuantidadeEstoque = produtoDto.QuantidadeEstoque,
+                    DataValidade = produtoDto.DataValidade,
+                    DataCadastro = DateTime.Now,
+                    FornecedorId = fornecedor.Id
+                };
+
+                _context.ProdutosFornecedor.Add(produto);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        return Ok("Fornecedor e produtos cadastrados com sucesso.");
     }
 
     // GET: api/fornecedor
@@ -59,7 +79,9 @@ public class FornecedorController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Fornecedor>> GetFornecedor(int id)
     {
-        var fornecedor = await _context.Fornecedor.FindAsync(id);
+        var fornecedor = await _context.Fornecedor
+            .Include(f => f.ProdutoFornecedor)
+            .FirstOrDefaultAsync(f => f.Id == id);
 
         if (fornecedor == null)
             return NotFound();
@@ -95,10 +117,14 @@ public class FornecedorController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFornecedor(int id)
     {
-        var fornecedor = await _context.Fornecedor.FindAsync(id);
+        var fornecedor = await _context.Fornecedor
+            .Include(f => f.ProdutoFornecedor)
+            .FirstOrDefaultAsync(f => f.Id == id);
+
         if (fornecedor == null)
             return NotFound();
 
+        _context.ProdutosFornecedor.RemoveRange(fornecedor.ProdutoFornecedor);
         _context.Fornecedor.Remove(fornecedor);
         await _context.SaveChangesAsync();
 
@@ -108,5 +134,31 @@ public class FornecedorController : ControllerBase
     private bool FornecedorExists(int id)
     {
         return _context.Fornecedor.Any(e => e.Id == id);
+    }
+    
+    // --- Novo endpoint para cadastrar lote de produtos (bebidas ou insumos) ---
+
+    [HttpPost("{fornecedorId}/produtos")]
+    public async Task<IActionResult> CadastrarProdutoNoFornecedor(int fornecedorId, [FromBody] CadastroProdutoDto dto)
+    {
+        var fornecedor = await _context.Fornecedor.FindAsync(fornecedorId);
+        if (fornecedor == null)
+            return NotFound("Fornecedor não encontrado.");
+
+        var produto = new ProdutoFornecedor
+        {
+            Nome = dto.Nome,
+            Tipo = dto.Tipo,
+            Preco = dto.Preco,
+            QuantidadeEstoque = dto.QuantidadeEstoque,
+            DataValidade = dto.DataValidade,
+            DataCadastro = DateTime.Now,
+            FornecedorId = fornecedorId
+        };
+
+        _context.ProdutosFornecedor.Add(produto);
+        await _context.SaveChangesAsync();
+
+        return Ok(produto);
     }
 }
