@@ -26,7 +26,7 @@ Content-Type: application/json
   "nomeEmpresa": "Distribuidora ABC Atualizada",
   "cnpj": "12345678000199",
   "emailCorporativo": "novoemail@distribuidoraabc.com",
-  "senhaHash": "$2a$12$exemploDeHashDeSenha"
+  "senhaHash": "$2a$11$6r/EHyoZm/ZQcZZNd3dcS.RC.vlAbLMhaQN4H8ttYxchQLPoTxEjy"
 }
 
 ### DELETE fornecedor (id 1)

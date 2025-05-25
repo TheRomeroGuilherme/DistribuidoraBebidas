@@ -11,14 +11,25 @@ public class ProdutoFornecedor
     public int Id { get; set; }
 
     [Required]
-    public string? NomeProdutoFornecedor { get; set; }
+    public string? Nome { get; set; }
 
     [Required]
-    public int UnidadeLoteFornecedor { get; set; }
+    public string? Tipo { get; set; }
 
     [Required]
-    public decimal ValorLoteFornecedor { get; set; }
+    public decimal Preco { get; set; }
 
+    [Required]
+    public int QuantidadeEstoque { get; set; }
+
+    [Required]
+    public DateTime DataValidade { get; set; }
+
+    [Required]
+    public DateTime DataCadastro { get; set; }
+
+    [Required]
     public int FornecedorId { get; set; }
+
     public Fornecedor Fornecedor { get; set; }
 }

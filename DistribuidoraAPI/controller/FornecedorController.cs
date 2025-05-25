@@ -38,6 +38,7 @@ public class FornecedorController : ControllerBase
             NomeEmpresa = dto.NomeEmpresa,
             Cnpj = dto.Cnpj,
             EmailCorporativo = dto.EmailCorporativo,
+            Senha = dto.Senha,
             SenhaHash = senhaHash
         };
 
