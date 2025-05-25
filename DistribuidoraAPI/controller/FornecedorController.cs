@@ -41,7 +41,7 @@ public class FornecedorController : ControllerBase
             SenhaHash = senhaHash
         };
 
-        _context.Fornecedores.Add(fornecedor);
+        _context.Fornecedor.Add(fornecedor);
         await _context.SaveChangesAsync();
 
         return Ok("Fornecedor cadastrado com sucesso.");
@@ -49,16 +49,16 @@ public class FornecedorController : ControllerBase
 
     // GET: api/fornecedor
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Fornecedor>>> GetFornecedores()
+    public async Task<ActionResult<IEnumerable<Fornecedor>>> GetFornecedor()
     {
-        return await _context.Fornecedores.ToListAsync();
+        return await _context.Fornecedor.ToListAsync();
     }
 
     // GET: api/fornecedor/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Fornecedor>> GetFornecedor(int id)
     {
-        var fornecedor = await _context.Fornecedores.FindAsync(id);
+        var fornecedor = await _context.Fornecedor.FindAsync(id);
 
         if (fornecedor == null)
             return NotFound();
@@ -94,11 +94,11 @@ public class FornecedorController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFornecedor(int id)
     {
-        var fornecedor = await _context.Fornecedores.FindAsync(id);
+        var fornecedor = await _context.Fornecedor.FindAsync(id);
         if (fornecedor == null)
             return NotFound();
 
-        _context.Fornecedores.Remove(fornecedor);
+        _context.Fornecedor.Remove(fornecedor);
         await _context.SaveChangesAsync();
 
         return NoContent();
@@ -106,6 +106,6 @@ public class FornecedorController : ControllerBase
 
     private bool FornecedorExists(int id)
     {
-        return _context.Fornecedores.Any(e => e.Id == id);
+        return _context.Fornecedor.Any(e => e.Id == id);
     }
 }

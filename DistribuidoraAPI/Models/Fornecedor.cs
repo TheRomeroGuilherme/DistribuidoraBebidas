@@ -16,15 +16,15 @@ namespace DistribuidoraAPI.Models
         [Required]
         [StringLength(14, MinimumLength = 14, ErrorMessage = "CNPJ deve ter 14 dígitos.")]
         public string? Cnpj { get; set; }
+        public string? Senha { get; set; }
 
         [Required]
         [EmailAddress(ErrorMessage = "E-mail corporativo inválido.")]
         public string? EmailCorporativo { get; set; }
-        public string? Senha { get; set; }
         
         [Required]
         public string? SenhaHash { get; set; }
 
-        public List<ProdutoFornecedor> Estoque { get; set; }
+        public List<ProdutoFornecedor> ProdutoFornecedor { get; set; }
     }
 }

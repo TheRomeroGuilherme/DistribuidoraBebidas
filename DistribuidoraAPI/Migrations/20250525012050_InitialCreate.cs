@@ -33,7 +33,7 @@ namespace DistribuidoraAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Fornecedores",
+                name: "Fornecedor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -42,6 +42,8 @@ namespace DistribuidoraAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Cnpj = table.Column<string>(type: "varchar(14)", maxLength: 14, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Senha = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     EmailCorporativo = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SenhaHash = table.Column<string>(type: "longtext", nullable: false)
@@ -49,7 +51,7 @@ namespace DistribuidoraAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Fornecedores", x => x.Id);
+                    table.PrimaryKey("PK_Fornecedor", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -75,7 +77,7 @@ namespace DistribuidoraAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Vendedores",
+                name: "Vendedor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -89,12 +91,12 @@ namespace DistribuidoraAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vendedores", x => x.Id);
+                    table.PrimaryKey("PK_Vendedor", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ProdutosFornecedor",
+                name: "ProdutoFornecedor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -107,18 +109,18 @@ namespace DistribuidoraAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProdutosFornecedor", x => x.Id);
+                    table.PrimaryKey("PK_ProdutoFornecedor", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProdutosFornecedor_Fornecedores_FornecedorId",
+                        name: "FK_ProdutoFornecedor_Fornecedor_FornecedorId",
                         column: x => x.FornecedorId,
-                        principalTable: "Fornecedores",
+                        principalTable: "Fornecedor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "Produtos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -133,16 +135,16 @@ namespace DistribuidoraAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Fornecedores_FornecedorId",
+                        name: "FK_Produtos_Fornecedor_FornecedorId",
                         column: x => x.FornecedorId,
-                        principalTable: "Fornecedores",
+                        principalTable: "Fornecedor",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Products_Vendedores_VendedorId",
+                        name: "FK_Produtos_Vendedor_VendedorId",
                         column: x => x.VendedorId,
-                        principalTable: "Vendedores",
+                        principalTable: "Vendedor",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -168,9 +170,9 @@ namespace DistribuidoraAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vendas_Vendedores_VendedorId",
+                        name: "FK_Vendas_Vendedor_VendedorId",
                         column: x => x.VendedorId,
-                        principalTable: "Vendedores",
+                        principalTable: "Vendedor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -196,9 +198,9 @@ namespace DistribuidoraAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CarrinhoDeCompras_Products_ProdutoId",
+                        name: "FK_CarrinhoDeCompras_Produtos_ProdutoId",
                         column: x => x.ProdutoId,
-                        principalTable: "Products",
+                        principalTable: "Produtos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -219,9 +221,9 @@ namespace DistribuidoraAPI.Migrations
                 {
                     table.PrimaryKey("PK_VenderItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VenderItems_Products_ProdutoId",
+                        name: "FK_VenderItems_Produtos_ProdutoId",
                         column: x => x.ProdutoId,
-                        principalTable: "Products",
+                        principalTable: "Produtos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -244,19 +246,19 @@ namespace DistribuidoraAPI.Migrations
                 column: "ProdutoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_FornecedorId",
-                table: "Products",
+                name: "IX_ProdutoFornecedor_FornecedorId",
+                table: "ProdutoFornecedor",
                 column: "FornecedorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_VendedorId",
-                table: "Products",
+                name: "IX_Produtos_FornecedorId",
+                table: "Produtos",
+                column: "FornecedorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produtos_VendedorId",
+                table: "Produtos",
                 column: "VendedorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProdutosFornecedor_FornecedorId",
-                table: "ProdutosFornecedor",
-                column: "FornecedorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vendas_ClienteId",
@@ -286,7 +288,7 @@ namespace DistribuidoraAPI.Migrations
                 name: "CarrinhoDeCompras");
 
             migrationBuilder.DropTable(
-                name: "ProdutosFornecedor");
+                name: "ProdutoFornecedor");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
@@ -295,19 +297,19 @@ namespace DistribuidoraAPI.Migrations
                 name: "VenderItems");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Produtos");
 
             migrationBuilder.DropTable(
                 name: "Vendas");
 
             migrationBuilder.DropTable(
-                name: "Fornecedores");
+                name: "Fornecedor");
 
             migrationBuilder.DropTable(
                 name: "Cliente");
 
             migrationBuilder.DropTable(
-                name: "Vendedores");
+                name: "Vendedor");
         }
     }
 }

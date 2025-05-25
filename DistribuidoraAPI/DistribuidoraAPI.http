@@ -11,10 +11,10 @@ POST http://localhost:5066/api/fornecedor/cadastro
 Content-Type: application/json
 
 {
-  "nomeEmpresa": "Distribuidora da hora",
+  "nomeEmpresa": "DistribuidoraABC",
   "cnpj": "12345678000199",
-  "emailCorporativo": "contato@distribuidora.adm.com",
-  "senha": "Complicado!123"
+  "emailCorporativo": "contato@distribuidoraabc.com",
+  "senha": "senha123"
 }
 
 ### PUT atualizar fornecedor (id 1)
@@ -23,7 +23,7 @@ Content-Type: application/json
 
 {
   "id": 1,
-  "nomeEmpresa": "Distribuidora da hora",
+  "nomeEmpresa": "Distribuidora ABC Atualizada",
   "cnpj": "12345678000199",
   "emailCorporativo": "novoemail@distribuidoraabc.com",
   "senhaHash": "$2a$12$exemploDeHashDeSenha"

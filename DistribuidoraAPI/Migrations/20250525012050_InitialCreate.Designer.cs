@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DistribuidoraAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250523022729_InitialCreate")]
+    [Migration("20250525012050_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -93,13 +93,17 @@ namespace DistribuidoraAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SenhaHash")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fornecedores");
+                    b.ToTable("Fornecedor");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Produto", b =>
@@ -135,7 +139,7 @@ namespace DistribuidoraAPI.Migrations
 
                     b.HasIndex("VendedorId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.ProdutoFornecedor", b =>
@@ -163,7 +167,7 @@ namespace DistribuidoraAPI.Migrations
 
                     b.HasIndex("FornecedorId");
 
-                    b.ToTable("ProdutosFornecedor");
+                    b.ToTable("ProdutoFornecedor");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Usuario", b =>
@@ -245,7 +249,7 @@ namespace DistribuidoraAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vendedores");
+                    b.ToTable("Vendedor");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.VenderItem", b =>
@@ -314,7 +318,7 @@ namespace DistribuidoraAPI.Migrations
             modelBuilder.Entity("DistribuidoraAPI.Models.ProdutoFornecedor", b =>
                 {
                     b.HasOne("DistribuidoraAPI.Models.Fornecedor", "Fornecedor")
-                        .WithMany("Estoque")
+                        .WithMany("ProdutoFornecedor")
                         .HasForeignKey("FornecedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -367,7 +371,7 @@ namespace DistribuidoraAPI.Migrations
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Fornecedor", b =>
                 {
-                    b.Navigation("Estoque");
+                    b.Navigation("ProdutoFornecedor");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.Venda", b =>
