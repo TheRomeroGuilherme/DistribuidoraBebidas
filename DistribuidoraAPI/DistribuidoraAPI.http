@@ -1,3 +1,8 @@
+@tokenCliente = balerinacappuccina
+
+@tokenDistribuidora = tralaleirotralala
+
+
 ### GET todos os fornecedores ou para pegar algum em especifico coloque "/{id}
 GET http://localhost:5066/api/fornecedor
 Accept: application/json
@@ -108,3 +113,50 @@ Accept: application/json
 DELETE http://localhost:5066/api/fornecedor/1
 
 
+### POST cadastrar entregador
+POST http://localhost:5066/api/entregador
+Authorization: Bearer {{tokenDistribuidora}}
+Content-Type: application/json
+
+{
+  "nome": "João Entregador",
+  "email": "joao@entregas.com",
+  "senha": "senha123"
+}
+
+### POST login entregador
+POST http://localhost:5066/api/entregador/login
+Content-Type: application/json
+
+{
+  "email": "joao@entregas.com",
+  "senha": "senha123"
+}
+
+### POST cadastro cliente
+POST http://localhost:5066/api/cliente/cadastro
+Content-Type: application/json
+
+{
+  "nome": "Maria Cliente",
+  "email": "maria@email.com",
+  "senha": "cliente123"
+}
+
+### GET produtos disponíveis no estoque da distribuidora
+GET http://localhost:5066/api/estoque
+Accept: application/json
+
+### POST adicionar ao carrinho (cliente autenticado)
+POST http://localhost:5066/api/carrinho
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "produtoId": 5,
+  "quantidade": 2
+}
+
+### POST finalizar pedido
+POST http://localhost:5066/api/pedido/finalizar
+Authorization: Bearer {{tokenCliente}}

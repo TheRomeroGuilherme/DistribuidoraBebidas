@@ -3,7 +3,6 @@ using System;
 using DistribuidoraAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,26 +11,22 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DistribuidoraAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250525213635_.")]
-    partial class _
+    [Migration("20250526032933_InicialDistribuidora")]
+    partial class InicialDistribuidora
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.13")
+                .HasAnnotation("ProductVersion", "8.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("DistribuidoraAPI.Models.CarrinhoDeCompra", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DistribuidoraId")
                         .HasColumnType("int");
@@ -51,13 +46,34 @@ namespace DistribuidoraAPI.Migrations
                     b.ToTable("CarrinhoDeCompras");
                 });
 
-            modelBuilder.Entity("DistribuidoraAPI.Models.Distribuidora", b =>
+            modelBuilder.Entity("DistribuidoraAPI.Models.Cliente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("DistribuidoraAPI.Models.Distribuidora", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<string>("Cnpj")
                         .IsRequired()
@@ -81,20 +97,41 @@ namespace DistribuidoraAPI.Migrations
                     b.ToTable("Distribuidora");
                 });
 
+            modelBuilder.Entity("DistribuidoraAPI.Models.Entregador", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Entregador");
+                });
+
             modelBuilder.Entity("DistribuidoraAPI.Models.Fornecedor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Cnpj")
                         .IsRequired()
                         .HasMaxLength(14)
                         .HasColumnType("varchar(14)");
 
-                    b.Property<string>("EmailCorporativo")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -111,13 +148,38 @@ namespace DistribuidoraAPI.Migrations
                     b.ToTable("Fornecedor");
                 });
 
-            modelBuilder.Entity("DistribuidoraAPI.Models.PedidoFornecedor", b =>
+            modelBuilder.Entity("DistribuidoraAPI.Models.Login", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Login");
+                });
+
+            modelBuilder.Entity("DistribuidoraAPI.Models.PedidoFornecedor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DataPedido")
                         .HasColumnType("datetime(6)");
@@ -146,8 +208,6 @@ namespace DistribuidoraAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime(6)");
 
@@ -171,14 +231,9 @@ namespace DistribuidoraAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("VendedorId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FornecedorId");
-
-                    b.HasIndex("VendedorId");
 
                     b.ToTable("Produtos");
                 });
@@ -188,8 +243,6 @@ namespace DistribuidoraAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime(6)");
@@ -219,117 +272,6 @@ namespace DistribuidoraAPI.Migrations
                     b.HasIndex("FornecedorId");
 
                     b.ToTable("ProdutosFornecedor");
-                });
-
-            modelBuilder.Entity("DistribuidoraAPI.Models.Usuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Senha")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SenhaHash")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("DistribuidoraAPI.Models.Venda", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DistribuidoraId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SaleDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("VendedorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DistribuidoraId");
-
-                    b.HasIndex("VendedorId");
-
-                    b.ToTable("Vendas");
-                });
-
-            modelBuilder.Entity("DistribuidoraAPI.Models.Vendedor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CNPJ")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NomeLoja")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SenhaHash")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Vendedor");
-                });
-
-            modelBuilder.Entity("DistribuidoraAPI.Models.VenderItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("PrecoUnitario")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VendaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProdutoId");
-
-                    b.HasIndex("VendaId");
-
-                    b.ToTable("VenderItems");
                 });
 
             modelBuilder.Entity("DistribuidoraAPI.Models.CarrinhoDeCompra", b =>
@@ -378,10 +320,6 @@ namespace DistribuidoraAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DistribuidoraAPI.Models.Vendedor", null)
-                        .WithMany("ProdutoItem")
-                        .HasForeignKey("VendedorId");
-
                     b.Navigation("Fornecedor");
                 });
 
@@ -396,57 +334,9 @@ namespace DistribuidoraAPI.Migrations
                     b.Navigation("Fornecedor");
                 });
 
-            modelBuilder.Entity("DistribuidoraAPI.Models.Venda", b =>
-                {
-                    b.HasOne("DistribuidoraAPI.Models.Distribuidora", "distribuidora")
-                        .WithMany()
-                        .HasForeignKey("DistribuidoraId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DistribuidoraAPI.Models.Vendedor", "vendedor")
-                        .WithMany()
-                        .HasForeignKey("VendedorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("distribuidora");
-
-                    b.Navigation("vendedor");
-                });
-
-            modelBuilder.Entity("DistribuidoraAPI.Models.VenderItem", b =>
-                {
-                    b.HasOne("DistribuidoraAPI.Models.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DistribuidoraAPI.Models.Venda", "Venda")
-                        .WithMany("Items")
-                        .HasForeignKey("VendaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Produto");
-
-                    b.Navigation("Venda");
-                });
-
             modelBuilder.Entity("DistribuidoraAPI.Models.Fornecedor", b =>
                 {
                     b.Navigation("ProdutoFornecedor");
-                });
-
-            modelBuilder.Entity("DistribuidoraAPI.Models.Venda", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("DistribuidoraAPI.Models.Vendedor", b =>
-                {
-                    b.Navigation("ProdutoItem");
                 });
 #pragma warning restore 612, 618
         }
