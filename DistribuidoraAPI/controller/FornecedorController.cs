@@ -3,7 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using DistribuidoraAPI.Data;
 using DistribuidoraAPI.Models;
 using DistribuidoraAPI.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
+
+
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class FornecedorController : ControllerBase

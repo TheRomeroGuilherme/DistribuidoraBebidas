@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using DistribuidoraAPI.Data;
 using DistribuidoraAPI.Models.DTOs;
-using DistribuidoraAPI.Services;
 using DistribuidoraAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace DistribuidoraAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase

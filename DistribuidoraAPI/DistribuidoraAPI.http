@@ -100,9 +100,11 @@ Content-Type: application/json
   "senhaHash": "$2a$11$ElCQKgH0I7bn23TmFeauNekK5yb6AIT0vb61IPQm/57J3lbi5AI0S"
 }
 
-### DELETE fornecedor por (id 1) 
-DELETE http://localhost:5066/api/fornecedor/1
-
 ### GET busca de produto de fornecedor por id
 GET http://localhost:5066/api/fornecedor/1/protutos
 Accept: application/json
+
+### DELETE fornecedor por (id 1) 
+DELETE http://localhost:5066/api/fornecedor/1
+
+

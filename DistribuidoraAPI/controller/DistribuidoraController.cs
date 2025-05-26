@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Http;
-using DistribuidoraAPI.Services;
-using DistribuidoraAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DistribuidoraAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using DistribuidoraAPI.Models;
 using DistribuidoraAPI.Models.DTOs;
 
 namespace DistribuidoraAPI.controller
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
     public class DistribuidoraController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -30,7 +30,9 @@ namespace DistribuidoraAPI.controller
             if (distribuidora == null || !BCrypt.Net.BCrypt.Verify(dto.Senha, distribuidora.SenhaHash))
                 return Unauthorized("E-mail ou senha inválidos.");
 
-            var token = GerarJwtToken(distribuidora);
+            var secretKey = _configuration["Jwt:Key"];
+            var token = TokenService.GerarToken(distribuidora.EmailCorporativo, "Distribuidora", secretKey);
+
             return Ok(new { token });
         }
 
