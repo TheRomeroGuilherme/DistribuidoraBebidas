@@ -19,11 +19,13 @@ namespace DistribuidoraAPI.Models
 
         [Required]
         [EmailAddress(ErrorMessage = "E-mail corporativo inválido.")]
-        public string EmailCorporativo { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         public string SenhaHash { get; set; } = string.Empty;
 
         public List<ProdutoFornecedor> ProdutoFornecedor { get; set; } = new();
+        
+
     }
 }

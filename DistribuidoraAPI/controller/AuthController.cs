@@ -1,8 +1,9 @@
-using DistribuidoraAPI.Data;
-using DistribuidoraAPI.Models.DTOs;
+// Controllers/AuthController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using DistribuidoraAPI.Data;
+using DistribuidoraAPI.Models.DTOs;
+using DistribuidoraAPI.Services;
 
 namespace DistribuidoraAPI.Controllers
 {
@@ -11,24 +12,51 @@ namespace DistribuidoraAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(AppDbContext context)
+        public AuthController(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UsuarioLoginDTO dto)
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email == dto.Email && u.Senha == dto.Senha);
+            var usuario = await _context.Distribuidora.FirstOrDefaultAsync(u => u.EmailCorporativo == dto.Email);
+            string tipoUsuario = "Distribuidora";
 
             if (usuario == null)
             {
-                return Unauthorized(new { mensagem = "Email ou senha inválidos." });
+                usuario = await _context.Fornecedor.FirstOrDefaultAsync(f => f.Email == dto.Email);
+                tipoUsuario = "Fornecedor";
             }
 
-            return Ok(new { mensagem = "Usuário logado com sucesso!", usuario.Nome });
+            if (usuario == null)
+            {
+                usuario = await _context.Entregador.FirstOrDefaultAsync(e => e.Email == dto.Email);
+                tipoUsuario = "Entregador";
+            }
+
+            if (usuario == null)
+            {
+                usuario = await _context.Clientes.FirstOrDefaultAsync(c => c.Email == dto.Email);
+                tipoUsuario = "Cliente";
+            }
+
+            if (usuario == null)
+                return Unauthorized("E-mail não encontrado.");
+
+            if (!BCrypt.Net.BCrypt.Verify(dto.Senha, usuario.SenhaHash))
+                return Unauthorized("Senha incorreta.");
+
+            var token = TokenService.GerarToken(dto.Email, tipoUsuario, _configuration["Jwt:Key"]);
+
+            return Ok(new
+            {
+                token,
+                tipo = tipoUsuario
+            });
         }
     }
 }

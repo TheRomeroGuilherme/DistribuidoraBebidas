@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DistribuidoraAPI.Models
 {
-    public class Usuario
+    public class Login
     {
         [Key]
         public int Id { get; set; }

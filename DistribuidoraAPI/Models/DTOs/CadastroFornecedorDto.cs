@@ -11,7 +11,7 @@ namespace DistribuidoraAPI.Models.DTOs
         public string? Cnpj { get; set; }
 
         [EmailAddress(ErrorMessage = "E-mail corporativo inválido.")]
-        public string EmailCorporativo { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty;
         public List<CadastroProdutoDto> ProdutosFornecedor { get; set; } = new();
         

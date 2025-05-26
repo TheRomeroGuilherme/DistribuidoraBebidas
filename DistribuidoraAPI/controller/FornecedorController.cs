@@ -27,7 +27,7 @@ public class FornecedorController : ControllerBase
             return BadRequest("CNPJ deve conter exatamente 14 dígitos numéricos.");
 
         // Validação do e-mail
-        if (!dto.EmailCorporativo.Contains("@") || !dto.EmailCorporativo.Contains(".com"))
+        if (!dto.Email.Contains("@") || !dto.Email.Contains(".com"))
             return BadRequest("E-mail corporativo inválido.");
 
         // Criptografa a senha
@@ -37,7 +37,7 @@ public class FornecedorController : ControllerBase
         {
             NomeEmpresa = dto.NomeEmpresa,
             Cnpj = dto.Cnpj,
-            EmailCorporativo = dto.EmailCorporativo,
+            Email = dto.Email,
             SenhaHash = senhaHash
         };
 
@@ -75,20 +75,33 @@ public class FornecedorController : ControllerBase
         return await _context.Fornecedor.ToListAsync();
     }
 
-    // GET: api/fornecedor/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Fornecedor>> GetFornecedor(int id)
+    // GET: api/fornecedor/1/produtos
+    [HttpGet("{id}/produtos")]
+    public async Task<IActionResult> GetProdutosDoFornecedor(int id)
     {
         var fornecedor = await _context.Fornecedor
             .Include(f => f.ProdutoFornecedor)
             .FirstOrDefaultAsync(f => f.Id == id);
 
         if (fornecedor == null)
-            return NotFound();
+        {
+            return NotFound(new { mensagem = "Fornecedor não encontrado." });
+        }
 
+        var produtos = fornecedor.ProdutoFornecedor.Select(p => new
+        {
+            p.Id,
+            p.Nome,
+            p.Tipo,
+            p.Preco,
+            p.QuantidadeEstoque,
+            p.DataValidade,
+            p.DataCadastro
+        });
 
-        return fornecedor;
+        return Ok(produtos);
     }
+
 
     // PUT: api/fornecedor/5
     [HttpPut("{id}")]
@@ -163,18 +176,4 @@ public class FornecedorController : ControllerBase
         return Ok(produto);
     }
 
-    // --- Listagem de produtos Fornecedor 
-    // GET: api/fornecedor/1/produtos
-    [HttpGet("{id}/produtos")]
-    public async Task<IActionResult> GetProdutosDoFornecedor(int id)
-    {
-        var fornecedor = await _context.Fornecedor
-            .Include(f => f.ProdutoFornecedor)
-            .FirstOrDefaultAsync(f => f.Id == id);
-
-        if (fornecedor == null)
-            return NotFound(new { mensagem = "Fornecedor não encontrado." });
-
-        return Ok(fornecedor.ProdutoFornecedor);
-    }
 }
