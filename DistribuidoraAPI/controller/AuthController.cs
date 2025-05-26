@@ -1,9 +1,10 @@
-// Controllers/AuthController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using DistribuidoraAPI.Data;
 using DistribuidoraAPI.Models.DTOs;
 using DistribuidoraAPI.Services;
+using DistribuidoraAPI.Models;
 
 namespace DistribuidoraAPI.Controllers
 {
@@ -23,34 +24,54 @@ namespace DistribuidoraAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var usuario = await _context.Distribuidora.FirstOrDefaultAsync(u => u.EmailCorporativo == dto.Email);
-            string tipoUsuario = "Distribuidora";
+            string tipoUsuario = dto.Usuario;
+            object usuario = null;
 
-            if (usuario == null)
+            switch (tipoUsuario)
             {
-                usuario = await _context.Fornecedor.FirstOrDefaultAsync(f => f.Email == dto.Email);
-                tipoUsuario = "Fornecedor";
-            }
+                case "Distribuidora":
+                    usuario = await _context.Distribuidora
+                        .FirstOrDefaultAsync(d => d.EmailCorporativo == dto.Email);
+                    break;
 
-            if (usuario == null)
-            {
-                usuario = await _context.Entregador.FirstOrDefaultAsync(e => e.Email == dto.Email);
-                tipoUsuario = "Entregador";
-            }
+                case "Fornecedor":
+                    usuario = await _context.Fornecedor
+                        .FirstOrDefaultAsync(f => f.Email == dto.Email);
+                    break;
 
-            if (usuario == null)
-            {
-                usuario = await _context.Clientes.FirstOrDefaultAsync(c => c.Email == dto.Email);
-                tipoUsuario = "Cliente";
+                case "Entregador":
+                    usuario = await _context.Entregador
+                        .FirstOrDefaultAsync(e => e.Email == dto.Email);
+                    break;
+
+                case "Cliente":
+                    usuario = await _context.Clientes
+                        .FirstOrDefaultAsync(c => c.Email == dto.Email);
+                    break;
+
+                default:
+                    return BadRequest("Tipo de usuário inválido.");
             }
 
             if (usuario == null)
                 return Unauthorized("E-mail não encontrado.");
 
-            if (!BCrypt.Net.BCrypt.Verify(dto.Senha, usuario.SenhaHash))
+            // Obter senha hash de forma dinâmica
+            string senhaHash = usuario switch
+            {
+                Distribuidora d => d.SenhaHash,
+                Fornecedor f => f.SenhaHash,
+                Entregador e => e.SenhaHash,
+                Cliente c => c.SenhaHash,
+                _ => null
+            };
+
+            if (senhaHash == null || !BCrypt.Net.BCrypt.Verify(dto.Senha, senhaHash))
                 return Unauthorized("Senha incorreta.");
 
-            var token = TokenService.GerarToken(dto.Email, tipoUsuario, _configuration["Jwt:Key"]);
+            // Gerar token com tipo e e-mail
+            string email = dto.Email;
+            string token = TokenService.GerarToken(email, tipoUsuario, _configuration["Jwt:Key"]);
 
             return Ok(new
             {

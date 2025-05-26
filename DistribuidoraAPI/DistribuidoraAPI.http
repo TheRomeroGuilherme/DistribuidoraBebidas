@@ -1,9 +1,5 @@
-### GET todos os fornecedores
+### GET todos os fornecedores ou para pegar algum em especifico coloque "/{id}
 GET http://localhost:5066/api/fornecedor
-Accept: application/json
-
-### GET fornecedor por id
-GET http://localhost:5066/api/fornecedor/1
 Accept: application/json
 
 ### POST cadastrar fornecedor (usando DTO)
@@ -93,7 +89,7 @@ Content-Type: application/json
 GET http://localhost:5066/api/fornecedor/1/produtos
 Accept: application/json
 
-### PUT atualizar fornecedor (id 1)
+### PUT atualizar fornecedor (id 1) caso o cadastro esteja errado
 PUT http://localhost:5066/api/fornecedor/3
 Content-Type: application/json
 
@@ -104,7 +100,7 @@ Content-Type: application/json
   "senhaHash": "$2a$11$ElCQKgH0I7bn23TmFeauNekK5yb6AIT0vb61IPQm/57J3lbi5AI0S"
 }
 
-### DELETE fornecedor (id 1)
+### DELETE fornecedor por (id 1) 
 DELETE http://localhost:5066/api/fornecedor/1
 
 ### GET busca de produto de fornecedor por id
