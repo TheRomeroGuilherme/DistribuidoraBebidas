@@ -35,6 +35,3 @@ ERP para distribuidoras que gerenciam compras, estoque e faturamento.
 ---
 
 ## 🧾 Descrição do Projeto
-
-Link para o BPMN:
-"https://drive.google.com/file/d/15njWlki_PN-cBdfaWcLgm9wzTkU0mF7X/view?usp=sharing"
